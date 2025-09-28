@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Search, Filter, MoreVertical, Play, Eye, Download, RefreshCw } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { useState } from 'react'
+import { Search, MoreVertical, Play, Eye, Download, RefreshCw } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
@@ -103,9 +103,7 @@ export function Executions() {
     }
   }
 
-  const getProgressPercentage = (completed: number, total: number) => {
-    return total > 0 ? (completed / total) * 100 : 0
-  }
+  // removed unused getProgressPercentage
 
   return (
     <div className="space-y-6">

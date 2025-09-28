@@ -3,14 +3,14 @@ import { cn } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'outline' | 'ghost'
+  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'outline' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
   children: React.ReactNode
 }
 
 export function Button({
-  variant = 'primary',
+  variant = 'default',
   size = 'md',
   loading = false,
   className,
@@ -23,6 +23,7 @@ export function Button({
       className={cn(
         'btn',
         {
+          'btn-default': variant === 'default',
           'btn-primary': variant === 'primary',
           'btn-secondary': variant === 'secondary',
           'btn-success': variant === 'success',

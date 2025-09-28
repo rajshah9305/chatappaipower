@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { Home, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -18,8 +17,8 @@ export function NotFound() {
         </div>
         
         <div className="space-y-4">
-          <Button asChild className="w-full">
-            <Link to="/">
+          <Button className="w-full">
+            <Link to="/" className="flex items-center justify-center">
               <Home className="mr-2 h-4 w-4" />
               Go Home
             </Link>

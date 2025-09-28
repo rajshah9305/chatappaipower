@@ -7,6 +7,21 @@ export default {
   theme: {
     extend: {
       colors: {
+        background: '#ffffff',
+        foreground: '#0f172a',
+        card: '#ffffff',
+        'card-foreground': '#0f172a',
+        accent: '#f1f5f9',
+        'accent-foreground': '#0f172a',
+        border: '#e2e8f0',
+        input: '#e2e8f0',
+        ring: '#2563eb',
+        'muted-foreground': '#64748b',
+        'primary-foreground': '#ffffff',
+        'secondary-foreground': '#0f172a',
+        'success-foreground': '#ffffff',
+        'warning-foreground': '#ffffff',
+        'error-foreground': '#ffffff',
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',

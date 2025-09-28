@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Save, RefreshCw, TestTube, Key, Database, Bell } from 'lucide-react'
+import { useState } from 'react'
+import { Save, TestTube, Key, Database, Bell } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -8,15 +8,15 @@ import { Badge } from '@/components/ui/Badge'
 export function Settings() {
   const [settings, setSettings] = useState({
     // API Settings
-    cerebrasApiKey: 'csk-fd9554wf4jdn99yd8wd5j3cyhcwmn53f8vt8nwn9h5449ek5',
-    defaultModel: 'llama-4-maverick-17b-128e-instruct',
+    cerebrasApiKey: '',
+    defaultModel: '',
     maxTokens: 32768,
     temperature: 0.6,
     topP: 0.9,
     
     // Database Settings
-    databaseUrl: 'postgresql://postgres:password@localhost:5432/crewai_db',
-    redisUrl: 'redis://localhost:6379',
+    databaseUrl: '',
+    redisUrl: '',
     
     // Application Settings
     appName: 'CrewAI Cerebras Platform',
@@ -48,7 +48,7 @@ export function Settings() {
     // Show test result
   }
 
-  const handleInputChange = (key: string, value: any) => {
+  const handleInputChange = (key: keyof typeof settings, value: unknown) => {
     setSettings(prev => ({ ...prev, [key]: value }))
   }
 
