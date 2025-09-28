@@ -271,6 +271,4 @@ Build and deploy the project on here --- do all that is necessary(edit/create/re
 
  Reference - https://inference-docs.cerebras.ai/introduction and https://blog.crewai.com/build-a-multi-ai-agent-workflow-cerebras-crewai-2/ and https://inference-docs.cerebras.ai/api-reference/chat-completions 
 
- api keys - csk-fd9554wf4jdn99yd8wd5j3cyhcwmn53f8vt8nwn9h5449ek5 
-
 '''import os from cerebras.cloud.sdk import Cerebras client = Cerebras( # This is the default and can be omitted api_key=os.environ.get("CEREBRAS_API_KEY") ) stream = client.chat.completions.create( messages=[ { "role": "system", "content": "" } ], model="llama-4-maverick-17b-128e-instruct", stream=True, max_completion_tokens=32768, temperature=0.6, top_p=0.9 ) for chunk in stream: print(chunk.choices[0].delta.content or "", end="")'''***********
