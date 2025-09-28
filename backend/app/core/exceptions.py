@@ -88,7 +88,7 @@ class ExternalServiceError(CustomException):
             message=f"Error with {service}: {message}",
             error_code="EXTERNAL_SERVICE_ERROR",
             status_code=502,
-            details={"service": service, **details or {}}
+            details={"service": service, **(details or {})}
         )
 
 
@@ -111,7 +111,7 @@ class WorkflowExecutionError(CustomException):
             message=f"Workflow {workflow_id} execution failed: {message}",
             error_code="WORKFLOW_EXECUTION_ERROR",
             status_code=422,
-            details={"workflow_id": workflow_id, **details or {}}
+            details={"workflow_id": workflow_id, **(details or {})}
         )
 
 
@@ -123,7 +123,7 @@ class AgentExecutionError(CustomException):
             message=f"Agent {agent_id} execution failed: {message}",
             error_code="AGENT_EXECUTION_ERROR",
             status_code=422,
-            details={"agent_id": agent_id, **details or {}}
+            details={"agent_id": agent_id, **(details or {})}
         )
 
 

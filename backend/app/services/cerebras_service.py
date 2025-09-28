@@ -5,7 +5,7 @@ Cerebras AI service for model inference
 import asyncio
 import json
 import logging
-from typing import Dict, Any, Optional, AsyncGenerator
+from typing import Dict, Any, Optional, AsyncGenerator, Union, Literal, overload, cast
 from cerebras.cloud.sdk import Cerebras
 from app.core.config import settings
 from app.core.exceptions import CerebrasAPIError
@@ -23,6 +23,30 @@ class CerebrasService:
         self.temperature = settings.TEMPERATURE
         self.top_p = settings.TOP_P
     
+    @overload
+    async def generate_completion(
+        self,
+        prompt: str,
+        model: Optional[str] = None,
+        max_tokens: Optional[int] = None,
+        temperature: Optional[float] = None,
+        top_p: Optional[float] = None,
+        stream: Literal[False] = False
+    ) -> Dict[str, Any]:
+        ...
+
+    @overload
+    async def generate_completion(
+        self,
+        prompt: str,
+        model: Optional[str] = None,
+        max_tokens: Optional[int] = None,
+        temperature: Optional[float] = None,
+        top_p: Optional[float] = None,
+        stream: Literal[True] = True
+    ) -> AsyncGenerator[Dict[str, Any], None]:
+        ...
+
     async def generate_completion(
         self,
         prompt: str,
@@ -31,7 +55,7 @@ class CerebrasService:
         temperature: Optional[float] = None,
         top_p: Optional[float] = None,
         stream: bool = False
-    ) -> Dict[str, Any]:
+    ) -> Union[Dict[str, Any], AsyncGenerator[Dict[str, Any], None]]:
         """Generate completion using Cerebras model"""
         try:
             model = model or self.default_model
@@ -52,7 +76,7 @@ class CerebrasService:
             ]
             
             if stream:
-                return await self._stream_completion(
+                return self._stream_completion(
                     messages=messages,
                     model=model,
                     max_tokens=max_tokens,
@@ -156,13 +180,15 @@ class CerebrasService:
             response = await self.generate_completion(
                 prompt=full_prompt,
                 model=model,
+                stream=False,
                 **kwargs
             )
             
+            response_dict = cast(Dict[str, Any], response)
             return {
-                "response": response["content"],
-                "tokens_used": response["tokens_used"],
-                "model": response["model"],
+                "response": response_dict["content"],
+                "tokens_used": response_dict["tokens_used"],
+                "model": response_dict["model"],
                 "context": context
             }
             

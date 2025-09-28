@@ -24,6 +24,7 @@ async def init_redis():
         socket_timeout=5,
         retry_on_timeout=True
     )
+    assert _redis is not None
     
     # Test connection
     try:
@@ -39,6 +40,7 @@ async def get_redis() -> redis.Redis:
     global _redis
     if _redis is None:
         await init_redis()
+    assert _redis is not None
     return _redis
 
 
@@ -64,6 +66,7 @@ class RedisCache:
         """Get value from cache"""
         if not self.redis:
             await self.initialize()
+        assert self.redis is not None
         
         try:
             value = await self.redis.get(key)
@@ -76,6 +79,7 @@ class RedisCache:
         """Set value in cache"""
         if not self.redis:
             await self.initialize()
+        assert self.redis is not None
         
         try:
             await self.redis.setex(key, expire, json.dumps(value))
@@ -86,6 +90,7 @@ class RedisCache:
         """Delete value from cache"""
         if not self.redis:
             await self.initialize()
+        assert self.redis is not None
         
         try:
             await self.redis.delete(key)
@@ -96,9 +101,10 @@ class RedisCache:
         """Check if key exists in cache"""
         if not self.redis:
             await self.initialize()
+        assert self.redis is not None
         
         try:
-            return await self.redis.exists(key) > 0
+            return bool(await self.redis.exists(key))
         except Exception as e:
             print(f"Error checking cache key {key}: {e}")
             return False
@@ -107,6 +113,7 @@ class RedisCache:
         """Get all keys matching pattern"""
         if not self.redis:
             await self.initialize()
+        assert self.redis is not None
         
         try:
             return await self.redis.keys(pattern)

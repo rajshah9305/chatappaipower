@@ -2,7 +2,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 
 interface BadgeProps {
-  variant?: 'default' | 'secondary' | 'success' | 'warning' | 'error' | 'outline'
+  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'outline'
   size?: 'sm' | 'md' | 'lg'
   children: React.ReactNode
   className?: string
@@ -20,6 +20,7 @@ export function Badge({
         'badge',
         {
           'badge-default': variant === 'default',
+          'badge-primary': variant === 'primary',
           'badge-secondary': variant === 'secondary',
           'badge-success': variant === 'success',
           'badge-warning': variant === 'warning',

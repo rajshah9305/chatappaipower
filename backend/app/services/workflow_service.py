@@ -6,10 +6,11 @@ import asyncio
 import logging
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 
 from app.models.workflow import Workflow, WorkflowExecution
-from app.models.task import Task
+from app.models.task import Task, TaskExecution
+from app.models.agent import Agent
 from app.schemas.workflow import WorkflowCreate, WorkflowUpdate, WorkflowResponse, WorkflowExecutionResponse
 from app.core.exceptions import NotFoundError, ValidationError, WorkflowExecutionError
 from app.core.websocket import websocket_manager
