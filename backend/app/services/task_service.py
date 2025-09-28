@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, func
 
 from app.models.task import Task, TaskExecution
+from app.models.workflow import Workflow
 from app.models.agent import Agent
 from app.schemas.task import TaskCreate, TaskUpdate, TaskResponse, TaskExecutionResponse
 from app.core.exceptions import NotFoundError, ValidationError, AgentExecutionError

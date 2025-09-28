@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json",
+  "include": ["backend/app", "backend/main.py"],
+  "exclude": ["backend/app/alembic"],
+  "venvPath": ".",
+  "reportMissingImports": "warning",
+  "reportMissingTypeStubs": "none",
+  "pythonVersion": "3.10",
+  "typeCheckingMode": "basic"
+}

@@ -165,6 +165,11 @@ class ConnectionManager:
         
         logger.info("All WebSocket connections closed")
 
+    async def initialize(self):
+        """Initialize connection manager (placeholder for symmetry)"""
+        # No-op for now; method exists to align with startup lifecycle
+        return None
+
 
 # Global WebSocket manager
 websocket_manager = ConnectionManager()
