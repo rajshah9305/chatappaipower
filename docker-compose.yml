@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: crewai_postgres
+    environment:
+      POSTGRES_DB: crewai_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - crewai_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: crewai_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - crewai_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: crewai_backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/crewai_db
+      - REDIS_URL=redis://redis:6379
+      - CEREBRAS_API_KEY=${CEREBRAS_API_KEY}
+      - SECRET_KEY=${SECRET_KEY:-default-secret-key}
+      - DEBUG=True
+      - FRONTEND_URL=http://localhost:3000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - crewai_network
+    restart: unless-stopped
+
+  # Frontend Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: crewai_frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_WS_URL=ws://localhost:8000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - crewai_network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: crewai_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - crewai_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  crewai_network:
+    driver: bridge
